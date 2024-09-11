@@ -1,4 +1,4 @@
-package com.wj.softwaremanagementservice;
+package com.wj.updatecenter.softwaremanagementservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

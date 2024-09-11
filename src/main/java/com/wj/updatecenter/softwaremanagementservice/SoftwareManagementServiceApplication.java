@@ -1,4 +1,4 @@
-package com.wj.softwaremanagementservice;
+package com.wj.updatecenter.softwaremanagementservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
