@@ -2,5 +2,6 @@ package com.wj.updatecenter.softwaremanagementservice.domain.application.model.d
 
 public record GetSimplifiedApplicationResponseDto(
         long id,
-        String name
+        String name,
+        String fullVersion
 ) { }

@@ -21,10 +21,10 @@ public class ApplicationController {
     private final SoftwareManagementPaginationHelper softwareManagementPaginationHelper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetApplicationDetailsDto> getApplication(@PathVariable long id) {
+    public ResponseEntity<GetApplicationDetailsDto> getApplicationDetails(@PathVariable long id) {
         log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
                 "GET", "/applications/{id}", "", id);
-        GetApplicationDetailsDto getApplicationDetailsDto = applicationService.getApplication(id);
+        GetApplicationDetailsDto getApplicationDetailsDto = applicationService.getApplicationDetails(id);
         log.info(GET_REQUEST_LOG_MESSAGE_TEMPLATE,
                 "Application", getApplicationDetailsDto.toString());
         return ResponseEntity.ok(getApplicationDetailsDto);
@@ -33,21 +33,21 @@ public class ApplicationController {
     @GetMapping
     public ResponseEntity<Page<GetSimplifiedApplicationResponseDto>> getApplications(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String productOwner,
-            @RequestParam(required = false) String assignedTo,
+            @RequestParam(required = false) long productOwnerId,
+            @RequestParam(required = false) long assigneeId,
             @RequestParam(defaultValue = "false") boolean archived,
             @RequestParam(defaultValue = DEFAULT_SORT) String sort,
             @RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) int pageNumber,
             @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize) {
         log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
                 "GET", "/applications", "", "");
-        log.info("With filter parameters: name: {}, productOwner: {}, assignedTo: {}, archived: {}",
-                name, productOwner, assignedTo, archived);
+        log.info("With filter parameters: name: {}, productOwnerId: {}, assigneeId: {}, archived: {}",
+                name, productOwnerId, assigneeId, archived);
         log.info("With pageNumber: {}, pageSize: {}", pageNumber, pageSize);
         log.info("With sort: {}", sort);
         Pageable pageable = softwareManagementPaginationHelper.convertToPageable(pageNumber, pageSize, sort);
         Page<GetSimplifiedApplicationResponseDto> getSimplifiedApplicationResponseDtos =
-                applicationService.getApplications(pageable, name, productOwner, assignedTo, archived);
+                applicationService.getApplications(pageable, name, productOwnerId, assigneeId, archived);
         log.info(GET_REQUEST_LOG_MESSAGE_TEMPLATE,
                 "Applications page", getSimplifiedApplicationResponseDtos.toString());
         return ResponseEntity.ok(getSimplifiedApplicationResponseDtos);

@@ -27,6 +27,7 @@ public class Application {
     private long businessOwnerId;
     @Column(nullable = false)
     private long assigneeId;
+    private String currentVersion;
     @Column(nullable = false)
     private long createdBy;
     @Column(nullable = false)
