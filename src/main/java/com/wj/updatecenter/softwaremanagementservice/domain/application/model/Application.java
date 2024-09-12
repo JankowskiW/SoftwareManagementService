@@ -24,9 +24,9 @@ public class Application {
     private String repositoryUrl;
     private String documentationUrl;
     @Column(nullable = false)
-    private long businessOwner;
+    private long businessOwnerId;
     @Column(nullable = false)
-    private long assignedTo;
+    private long assigneeId;
     @Column(nullable = false)
     private long createdBy;
     @Column(nullable = false)
