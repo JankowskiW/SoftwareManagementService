@@ -35,6 +35,7 @@
 		<postgres.version>42.7.3</postgres.version>
 		<openapi.version>2.5.0</openapi.version>
 		<shared-helper-library.version>1.0.0</shared-helper-library.version>
+		<common-exception-library.version>1.0.0</common-exception-library.version>
 	</properties>
 
 	<dependencies>
@@ -82,6 +83,12 @@
 			<groupId>com.wj.updatecenter</groupId>
 			<artifactId>shared-helper-library</artifactId>
 			<version>${shared-helper-library.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.wj.shared</groupId>
+			<artifactId>common-exception-library</artifactId>
+			<version>${common-exception-library.version}</version>
 		</dependency>
 
 		<!-- TESTS -->

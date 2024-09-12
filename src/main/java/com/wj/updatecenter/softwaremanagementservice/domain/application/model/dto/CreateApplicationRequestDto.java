@@ -6,5 +6,5 @@ public record CreateApplicationRequestDto(
         String repositoryUrl,
         String documentationUrl,
         long businessOwnerId,
-        long assignee
+        long assigneeId
 ) { }

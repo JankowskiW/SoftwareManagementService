@@ -8,15 +8,16 @@ public record GetApplicationDetailsDto(
     String description,
     String repositoryUrl,
     String documentationUrl,
-    String businessOwner,
-    String assignedTo,
-    String createdBy,
+    long businessOwnerId,
+    long assigneeId,
+    long createdBy,
     LocalDateTime createdAt,
-    String updatedBy,
+    long updatedBy,
     LocalDateTime updatedAt,
-    String archivedBy,
+    long archivedBy,
     LocalDateTime archivedAt,
+    boolean archived,
     String currentVersion,
-    LocalDateTime currentVersionReleasedAt,
-    String currentVersionReleasedBy
+    long currentVersionReleasedBy,
+    LocalDateTime currentVersionReleasedAt
 ) { }
