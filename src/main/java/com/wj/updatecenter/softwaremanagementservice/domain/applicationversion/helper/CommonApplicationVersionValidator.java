@@ -2,9 +2,12 @@ package com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.
 
 import com.wj.shared.definition.RequestValidationException;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.ApplicationVersionRepository;
+import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.ApplicationVersion;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -35,5 +38,15 @@ public class CommonApplicationVersionValidator {
         if (!applicationVersionRepository.existsById(id)) {
             throw RequestValidationException.notFound(ENTITY_NAME, ID_FIELD_NAME, id);
         }
+    }
+
+    public void validateIfCurrentVersionsMatches(String currentVersion, long applicationId) {
+        Optional<ApplicationVersion> currentApplicationVersion = applicationVersionRepository
+                .findByApplicationIdAndCurrent(applicationId, true);
+        if (currentApplicationVersion.isPresent() &&
+                currentApplicationVersion.get().getFullVersion().equals(currentVersion)) {
+            return;
+        }
+        throw new RequestValidationException("Given current version does not match current application version");
     }
 }
