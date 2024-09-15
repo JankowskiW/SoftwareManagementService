@@ -8,13 +8,10 @@ public record UpdateApplicationResponseDto(
         String description,
         String repositoryUrl,
         String documentationUrl,
-        String businessOwner,
-        String assignee,
-        String createdBy,
+        long businessOwnerId,
+        long assigneeId,
+        long createdBy,
         LocalDateTime createdAt,
-        String updatedBy,
-        LocalDateTime updatedAt,
-        boolean archived,
-        String archivedBy,
-        LocalDateTime archivedAt
+        long updatedBy,
+        LocalDateTime updatedAt
 ) { }

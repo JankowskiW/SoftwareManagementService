@@ -5,6 +5,8 @@ public record UpdateApplicationRequestDto(
         String description,
         String repositoryUrl,
         String documentationUrl,
-        long businessOwnerId,
-        long assigneeId
+        Long businessOwnerId,
+        Long assigneeId,
+        String currentVersion,
+        Boolean archived
 ) { }

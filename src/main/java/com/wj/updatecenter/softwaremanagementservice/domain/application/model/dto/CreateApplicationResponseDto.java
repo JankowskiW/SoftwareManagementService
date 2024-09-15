@@ -6,6 +6,6 @@ public record CreateApplicationResponseDto(
         String description,
         String repositoryUrl,
         String documentationUrl,
-        String businessOwner,
-        String assignee
+        long businessOwnerId,
+        long assigneeId
 ) { }
