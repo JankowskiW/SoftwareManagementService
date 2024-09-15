@@ -9,7 +9,10 @@ import com.wj.updatecenter.softwaremanagementservice.domain.application.mapper.A
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Application;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.*;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.ApplicationVersionService;
+import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionRequestDto;
+import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionResponseDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,5 +79,19 @@ public class ApplicationService {
     public void deleteApplication(long id) {
         applicationValidator.validateDeleteRequest(id);
         applicationRepository.deleteById(id);
+    }
+
+    @Transactional
+    public CreateApplicationVersionResponseDto addVersionToApplicationDto(
+            CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
+            long id) {
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> ResourceNotFoundException.notFound(
+                        CommonApplicationValidator.ENTITY_NAME, CommonApplicationValidator.ID_FIELD_NAME, id));
+        CreateApplicationVersionResponseDto createApplicationVersionResponseDto =
+                applicationVersionService.createApplicationVersion(createApplicationVersionRequestDto, id);
+        application.setCurrentVersion(createApplicationVersionResponseDto.getFullVersion());
+        applicationRepository.save(application);
+        return createApplicationVersionResponseDto;
     }
 }

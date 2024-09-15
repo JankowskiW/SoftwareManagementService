@@ -13,9 +13,9 @@ public class ApplicationVersionValidator {
 
     public void validateCreateRequest(CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
                                       long applicationId) {
-        commonApplicationValidator.validateIfExistsById(applicationId);
         commonApplicationVersionValidator.validateIfDoesNotExistByApplicationIdAndFullVersion(
                 createApplicationVersionRequestDto, applicationId);
+        commonApplicationValidator.validateIfExistsById(applicationId);
     }
 
     public void validateDeleteRequest(long id) {

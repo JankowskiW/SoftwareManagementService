@@ -24,4 +24,8 @@ public class ApplicationValidator {
     public void validateDeleteRequest(long id) {
         commonApplicationValidator.validateIfExistsById(id);
     }
+
+    public void validateAddVersionToApplicationRequest(long id) {
+        commonApplicationValidator.validateIfExistsById(id);
+    }
 }

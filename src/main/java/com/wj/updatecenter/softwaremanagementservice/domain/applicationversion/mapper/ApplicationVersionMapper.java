@@ -37,7 +37,8 @@ public class ApplicationVersionMapper {
     }
 
     public ApplicationVersion toApplicationVersion(
-            CreateApplicationVersionRequestDto createApplicationVersionRequestDto, long applicationId) {
+            CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
+            long applicationId) {
         ApplicationVersion applicationVersion = new ApplicationVersion();
         applicationVersion.setApplicationId(applicationId);
         applicationVersion.setMajor(createApplicationVersionRequestDto.major());

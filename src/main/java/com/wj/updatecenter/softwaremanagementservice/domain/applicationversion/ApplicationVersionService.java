@@ -9,6 +9,7 @@ import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.m
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionResponseDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetSimplifiedApplicationVersionResponseDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,10 +46,18 @@ public class ApplicationVersionService {
         return applicationVersionsPage.map(applicationVersionMapper::toGetSimplifiedApplicationVersionResponseDto);
     }
 
+    @Transactional
     public CreateApplicationVersionResponseDto createApplicationVersion(
             CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
             long applicationId) {
         applicationVersionValidator.validateCreateRequest(createApplicationVersionRequestDto, applicationId);
+        Optional<ApplicationVersion> currentApplicationVersion = applicationVersionRepository
+                .findByApplicationIdAndCurrent(applicationId, true);
+        if (currentApplicationVersion.isPresent()) {
+            ApplicationVersion applicationVersion = currentApplicationVersion.get();
+            applicationVersion.setCurrent(false);
+            applicationVersionRepository.save(applicationVersion);
+        }
         ApplicationVersion applicationVersion = applicationVersionMapper
                 .toApplicationVersion(createApplicationVersionRequestDto, applicationId);
         applicationVersion = applicationVersionRepository.save(applicationVersion);

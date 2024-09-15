@@ -15,4 +15,8 @@ public record CreateApplicationVersionResponseDto(
     LocalDateTime createdAt,
     long updatedBy,
     LocalDateTime updatedAt
-) { }
+) {
+    public String getFullVersion() {
+        return major + "." + minor + "." + patch + "." + build;
+    }
+}
