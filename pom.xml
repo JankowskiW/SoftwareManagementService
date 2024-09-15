@@ -35,7 +35,7 @@
 		<postgres.version>42.7.3</postgres.version>
 		<openapi.version>2.5.0</openapi.version>
 		<shared-helper-library.version>1.0.0</shared-helper-library.version>
-		<common-exception-library.version>1.0.0</common-exception-library.version>
+		<common-exception-library.version>1.1.0</common-exception-library.version>
 	</properties>
 
 	<dependencies>

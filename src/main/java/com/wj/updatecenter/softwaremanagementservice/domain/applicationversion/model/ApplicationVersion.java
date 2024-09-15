@@ -17,6 +17,8 @@ public class ApplicationVersion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(nullable = false)
+    private long applicationId;
+    @Column(nullable = false)
     private int major;
     @Column(nullable = false)
     private int minor;

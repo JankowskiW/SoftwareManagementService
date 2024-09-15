@@ -4,15 +4,19 @@ import com.wj.shared.definition.ResourceNotFoundException;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationMerger;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationSpecificationBuilder;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationValidator;
+import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.CommonApplicationValidator;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.mapper.ApplicationMapper;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Application;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.*;
+import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.ApplicationVersionService;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +26,17 @@ public class ApplicationService {
     private final ApplicationSpecificationBuilder applicationSpecificationBuilder;
     private final ApplicationValidator applicationValidator;
     private final ApplicationMerger applicationMerger;
+    private final ApplicationVersionService applicationVersionService;
 
     public GetApplicationDetailsDto getApplicationDetails(long id) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> ResourceNotFoundException.notFound(
-                        ApplicationValidator.ENTITY_NAME, ApplicationValidator.ID_FIELD_NAME, id));
-        GetApplicationVersionDetailsDto getApplicationVersionDetailsDto = null; // TODO: applicationVersionService.getApplicationVersion(currentVersionId);
-        return applicationMapper.toGetApplicationDetailsDto(application, getApplicationVersionDetailsDto);
+                        CommonApplicationValidator.ENTITY_NAME, CommonApplicationValidator.ID_FIELD_NAME, id));
+        Optional<GetApplicationVersionDetailsDto> getApplicationVersionDetailsDto =
+                applicationVersionService.getCurrentApplicationVersionDetails(id);
+        return applicationMapper.toGetApplicationDetailsDto(
+                application,
+                getApplicationVersionDetailsDto.orElse(null));
     }
 
     public Page<GetSimplifiedApplicationResponseDto> getApplications(
@@ -58,7 +66,7 @@ public class ApplicationService {
             UpdateApplicationRequestDto updateApplicationRequestDto, long id) {
         Application originalApplication = applicationRepository.findById(id)
                 .orElseThrow(() -> ResourceNotFoundException.notFound(
-                        ApplicationValidator.ENTITY_NAME, ApplicationValidator.ID_FIELD_NAME, id));
+                        CommonApplicationValidator.ENTITY_NAME, CommonApplicationValidator.ID_FIELD_NAME, id));
         applicationValidator.validateUpdateRequest(updateApplicationRequestDto, originalApplication.getId());
         Application applicationToUpdate = applicationMapper.toApplication(updateApplicationRequestDto, id);
         Application application = applicationRepository.save(applicationMerger.merge(originalApplication, applicationToUpdate));

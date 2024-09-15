@@ -1,7 +1,10 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto;
 
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 
+@Builder
 public record GetApplicationDetailsDto(
     long id,
     String name,

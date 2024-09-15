@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public record GetApplicationVersionDetailsDto(
         long id,
+        long applicationId,
         int major,
         int minor,
         int patch,

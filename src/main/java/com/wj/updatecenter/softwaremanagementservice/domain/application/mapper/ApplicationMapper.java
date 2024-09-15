@@ -11,25 +11,28 @@ public class ApplicationMapper {
     public GetApplicationDetailsDto toGetApplicationDetailsDto(
             Application application,
             GetApplicationVersionDetailsDto currentApplicationVersion) {
-        return new GetApplicationDetailsDto(
-                application.getId(),
-                application.getName(),
-                application.getDescription(),
-                application.getRepositoryUrl(),
-                application.getDocumentationUrl(),
-                application.getBusinessOwnerId(),
-                application.getAssigneeId(),
-                application.getCreatedBy(),
-                application.getCreatedAt(),
-                application.getUpdatedBy(),
-                application.getUpdatedAt(),
-                application.getArchivedBy(),
-                application.getArchivedAt(),
-                application.getArchived(),
-                currentApplicationVersion.fullVersion(),
-                currentApplicationVersion.createdBy(),
-                currentApplicationVersion.createdAt()
-        );
+        GetApplicationDetailsDto.GetApplicationDetailsDtoBuilder builder = GetApplicationDetailsDto.builder();
+        builder.id(application.getId())
+                .name(application.getName())
+                .description(application.getDescription())
+                .repositoryUrl(application.getRepositoryUrl())
+                .documentationUrl(application.getDocumentationUrl())
+                .businessOwnerId(application.getBusinessOwnerId())
+                .assigneeId(application.getAssigneeId())
+                .createdBy(application.getCreatedBy())
+                .createdAt(application.getCreatedAt())
+                .updatedBy(application.getUpdatedBy())
+                .updatedAt(application.getUpdatedAt())
+                .archivedBy(application.getArchivedBy())
+                .archivedAt(application.getArchivedAt())
+                .archived(application.getArchived());
+        if (currentApplicationVersion != null) {
+            builder.currentVersion(currentApplicationVersion.fullVersion())
+                    .currentVersionReleasedBy(currentApplicationVersion.createdBy())
+                    .currentVersionReleasedAt(currentApplicationVersion.createdAt());
+        }
+
+        return builder.build();
     }
 
     public GetSimplifiedApplicationResponseDto toGetSimplifiedApplicationResponseDto(Application application) {
