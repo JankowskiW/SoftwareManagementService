@@ -2,6 +2,8 @@ package com.wj.updatecenter.softwaremanagementservice.domain.application;
 
 import com.wj.updatecenter.softwaremanagementservice.core.helper.SoftwareManagementPaginationHelper;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.*;
+import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionRequestDto;
+import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -92,8 +94,6 @@ public class ApplicationController {
         return ResponseEntity.ok(updateApplicationResponseDto);
     }
 
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteApplication(@PathVariable long id) {
         log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
@@ -101,5 +101,17 @@ public class ApplicationController {
         applicationService.deleteApplication(id);
         log.info(DELETE_REQUEST_LOG_MESSAGE_TEMPLATE, "Application", id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/application-versions")
+    public ResponseEntity<CreateApplicationVersionResponseDto> addVersionToApplication(
+            @PathVariable long id,
+            @RequestBody CreateApplicationVersionRequestDto createApplicationVersionRequestDto) {
+        log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
+                "PATCH", "/applications/{id}/application-versions", createApplicationVersionRequestDto.toString(), "id: " + id);
+        CreateApplicationVersionResponseDto createApplicationVersionResponseDto =
+                applicationService.addVersionToApplication(createApplicationVersionRequestDto, id);
+        log.info(PATCH_REQUEST_LOG_MESSAGE_TEMPLATE, "Application", "id: " + id);
+        return ResponseEntity.ok(createApplicationVersionResponseDto);
     }
 }

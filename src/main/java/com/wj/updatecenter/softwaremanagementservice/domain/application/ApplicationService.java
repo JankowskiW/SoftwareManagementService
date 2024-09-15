@@ -82,7 +82,7 @@ public class ApplicationService {
     }
 
     @Transactional
-    public CreateApplicationVersionResponseDto addVersionToApplicationDto(
+    public CreateApplicationVersionResponseDto addVersionToApplication(
             CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
             long id) {
         Application application = applicationRepository.findById(id)
