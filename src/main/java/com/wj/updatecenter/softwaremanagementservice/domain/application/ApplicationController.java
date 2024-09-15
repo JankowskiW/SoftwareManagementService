@@ -66,27 +66,33 @@ public class ApplicationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateApplicationResponseDto> updateApplication(
+    public ResponseEntity<UpdateApplicationResponseDto> fullyUpdateApplication(
+            @PathVariable long id,
             @RequestBody UpdateApplicationRequestDto updateApplicationRequestDto) {
         log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
-                "PUT", "/applications/{id}", updateApplicationRequestDto.toString(), "");
+                "PUT", "/applications/{id}", updateApplicationRequestDto.toString(), "id: " + id);
         UpdateApplicationResponseDto updateApplicationResponseDto
-                = applicationService.updateApplication(updateApplicationRequestDto);
+                = applicationService.fullyUpdateApplication(updateApplicationRequestDto, id);
         log.info(PUT_REQUEST_LOG_MESSAGE_TEMPLATE,
                 "Application", updateApplicationResponseDto.toString());
         return ResponseEntity.ok(updateApplicationResponseDto);
     }
 
-    @PatchMapping("/{id}/archive")
-    public ResponseEntity<ArchiveApplicationResponseDto> archiveApplication(@PathVariable long id) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<UpdateApplicationResponseDto> partiallyUpdateApplication(
+            @PathVariable long id,
+            @RequestBody UpdateApplicationRequestDto updateApplicationRequestDto) {
+        // TODO: It should be changed to PartiallyUpdate and also POST update should be updated to fullyUpdate but it should be just one UpdateUserRequest and UpdateUserResponse dtos as in Users
         log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
-                "PATCH", "/applications/{id}/archive", "", "id: " + id);
-        ArchiveApplicationResponseDto archiveApplicationResponseDto
-                = applicationService.archiveApplication(id);
+                "PATCH", "/applications/{id}", updateApplicationRequestDto.toString(), "id: " + id);
+        UpdateApplicationResponseDto updateApplicationResponseDto
+                = applicationService.partiallyUpdateApplication(updateApplicationRequestDto, id);
         log.info(PATCH_REQUEST_LOG_MESSAGE_TEMPLATE,
                 "Application", "id: " + id);
-        return ResponseEntity.ok(archiveApplicationResponseDto);
+        return ResponseEntity.ok(updateApplicationResponseDto);
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteApplication(@PathVariable long id) {

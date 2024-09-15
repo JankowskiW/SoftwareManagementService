@@ -9,7 +9,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
-    boolean existsByName(String name);
 
     Page<Application> findAll(Specification<Application> specification, Pageable pageable);
+
+    boolean existsByNameAndIdNot(String name, long id);
+
+    boolean existsByName(String name);
+
+    boolean existsByIdAndArchived(long id, boolean archived);
 }

@@ -24,9 +24,9 @@ public class Application {
     private String repositoryUrl;
     private String documentationUrl;
     @Column(nullable = false)
-    private long businessOwnerId;
+    private Long businessOwnerId;
     @Column(nullable = false)
-    private long assigneeId;
+    private Long assigneeId;
     private String currentVersion;
     @Column(nullable = false)
     private long createdBy;
@@ -36,7 +36,7 @@ public class Application {
     private long updatedBy;
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-    private boolean archived;
-    private long archivedBy;
+    private Boolean archived;
+    private Long archivedBy;
     private LocalDateTime archivedAt;
 }

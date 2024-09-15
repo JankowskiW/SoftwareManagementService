@@ -1,6 +1,7 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application;
 
 import com.wj.shared.definition.ResourceNotFoundException;
+import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationMerger;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationSpecificationBuilder;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationValidator;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.mapper.ApplicationMapper;
@@ -19,6 +20,8 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationMapper applicationMapper;
     private final ApplicationSpecificationBuilder applicationSpecificationBuilder;
+    private final ApplicationValidator applicationValidator;
+    private final ApplicationMerger applicationMerger;
 
     public GetApplicationDetailsDto getApplicationDetails(long id) {
         Application application = applicationRepository.findById(id)
@@ -29,25 +32,41 @@ public class ApplicationService {
     }
 
     public Page<GetSimplifiedApplicationResponseDto> getApplications(
-            Pageable pageable, String name, long productOwner, long assignedTo, boolean archived) {
+            Pageable pageable, String name, long productOwner, long assigneeId, boolean archived) {
         Specification<Application> specification =
-                applicationSpecificationBuilder.build(name, productOwner, assignedTo, archived);
+                applicationSpecificationBuilder.build(name, productOwner, assigneeId, archived);
         Page<Application> applicationsPage = applicationRepository.findAll(specification, pageable);
         return applicationsPage.map(applicationMapper::toGetSimplifiedApplicationResponseDto);
     }
 
     public CreateApplicationResponseDto createApplication(CreateApplicationRequestDto createApplicationRequestDto) {
-        return null;
+        applicationValidator.validateCreateRequest(createApplicationRequestDto);
+        Application application = applicationMapper.toApplication(createApplicationRequestDto);
+        application = applicationRepository.save(application);
+        return applicationMapper.toCreateApplicationResponseDto(application);
     }
 
-    public UpdateApplicationResponseDto updateApplication(UpdateApplicationRequestDto updateApplicationRequestDto) {
-        return null;
+    public UpdateApplicationResponseDto fullyUpdateApplication(
+            UpdateApplicationRequestDto updateApplicationRequestDto, long id) {
+        applicationValidator.validateUpdateRequest(updateApplicationRequestDto, id);
+        Application application = applicationMapper.toApplication(updateApplicationRequestDto, id);
+        application = applicationRepository.save(application);
+        return applicationMapper.toUpdateApplicationResponseDto(application);
     }
 
-    public ArchiveApplicationResponseDto archiveApplication(long id) {
-        return null;
+    public UpdateApplicationResponseDto partiallyUpdateApplication(
+            UpdateApplicationRequestDto updateApplicationRequestDto, long id) {
+        Application originalApplication = applicationRepository.findById(id)
+                .orElseThrow(() -> ResourceNotFoundException.notFound(
+                        ApplicationValidator.ENTITY_NAME, ApplicationValidator.ID_FIELD_NAME, id));
+        applicationValidator.validateUpdateRequest(updateApplicationRequestDto, originalApplication.getId());
+        Application applicationToUpdate = applicationMapper.toApplication(updateApplicationRequestDto, id);
+        Application application = applicationRepository.save(applicationMerger.merge(originalApplication, applicationToUpdate));
+        return applicationMapper.toUpdateApplicationResponseDto(application);
     }
 
     public void deleteApplication(long id) {
+        applicationValidator.validateDeleteRequest(id);
+        applicationRepository.deleteById(id);
     }
 }
