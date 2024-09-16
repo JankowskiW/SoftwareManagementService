@@ -77,8 +77,10 @@ public class ApplicationService {
         return applicationMapper.toUpdateApplicationResponseDto(application);
     }
 
+    @Transactional
     public void deleteApplication(long id) {
         applicationValidator.validateDeleteRequest(id);
+        applicationVersionService.deleteApplicationVersionsByApplicationId(id);
         applicationRepository.deleteById(id);
     }
 

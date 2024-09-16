@@ -27,7 +27,7 @@ public class ApplicationVersionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteApplication(@PathVariable long id) {
+    public ResponseEntity<Void> deleteApplicationVersion(@PathVariable long id) {
         log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
                 "DELETE", "/application-versions/{id}", "", "id: " + id);
         applicationVersionService.deleteApplicationVersion(id);

@@ -68,4 +68,8 @@ public class ApplicationVersionService {
         applicationVersionValidator.validateDeleteRequest(id);
         applicationVersionRepository.deleteById(id);
     }
+
+    public void deleteApplicationVersionsByApplicationId(long applicationId) {
+        applicationVersionRepository.deleteByApplicationId(applicationId);
+    }
 }

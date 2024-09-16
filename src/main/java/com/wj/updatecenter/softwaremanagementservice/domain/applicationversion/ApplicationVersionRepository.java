@@ -16,4 +16,6 @@ public interface ApplicationVersionRepository extends JpaRepository<ApplicationV
             long applicationId, int major, int minor, int patch, int build);
 
     Optional<ApplicationVersion> findByApplicationIdAndCurrent(long applicationId, boolean current);
+
+    void deleteByApplicationId(long applicationId);
 }
