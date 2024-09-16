@@ -11,6 +11,7 @@ public class ApplicationMapper {
     public GetApplicationDetailsDto toGetApplicationDetailsDto(
             Application application,
             GetApplicationVersionDetailsDto currentApplicationVersion) {
+        if (application == null) return null;
         GetApplicationDetailsDto.GetApplicationDetailsDtoBuilder builder = GetApplicationDetailsDto.builder();
         builder.id(application.getId())
                 .name(application.getName())
@@ -36,6 +37,7 @@ public class ApplicationMapper {
     }
 
     public GetSimplifiedApplicationResponseDto toGetSimplifiedApplicationResponseDto(Application application) {
+        if (application == null) return null;
         String currentVersion = application.getCurrentVersion() == null ? "" : application.getCurrentVersion();
         return new GetSimplifiedApplicationResponseDto(
                 application.getId(),
@@ -45,6 +47,7 @@ public class ApplicationMapper {
     }
 
     public Application toApplication(CreateApplicationRequestDto createApplicationRequestDto) {
+        if (createApplicationRequestDto == null) return null;
         Application application = new Application();
         application.setName(createApplicationRequestDto.name());
         application.setDescription(createApplicationRequestDto.description());
@@ -56,6 +59,7 @@ public class ApplicationMapper {
     }
 
     public CreateApplicationResponseDto toCreateApplicationResponseDto(Application application) {
+        if (application == null) return null;
         return new CreateApplicationResponseDto(
                 application.getId(),
                 application.getName(),
@@ -68,6 +72,7 @@ public class ApplicationMapper {
     }
 
     public Application toApplication(UpdateApplicationRequestDto updateApplicationRequestDto, long id) {
+        if (updateApplicationRequestDto == null) return null;
         Application application = new Application();
         application.setId(id);
         application.setName(updateApplicationRequestDto.name());
@@ -81,6 +86,7 @@ public class ApplicationMapper {
     }
 
     public UpdateApplicationResponseDto toUpdateApplicationResponseDto(Application application) {
+        if (application == null) return null;
         return new UpdateApplicationResponseDto(
                 application.getId(),
                 application.getName(),

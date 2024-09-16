@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationVersionMapper {
     public GetApplicationVersionDetailsDto toGetApplicationVersionDetailsDto(ApplicationVersion applicationVersion) {
+        if (applicationVersion == null) return null;
         return new GetApplicationVersionDetailsDto(
                 applicationVersion.getId(),
                 applicationVersion.getApplicationId(),
@@ -29,6 +30,7 @@ public class ApplicationVersionMapper {
 
     public GetSimplifiedApplicationVersionResponseDto toGetSimplifiedApplicationVersionResponseDto(
             ApplicationVersion applicationVersion) {
+        if (applicationVersion == null) return null;
         return new GetSimplifiedApplicationVersionResponseDto(
                 applicationVersion.getId(),
                 applicationVersion.getFullVersion(),
@@ -39,6 +41,7 @@ public class ApplicationVersionMapper {
     public ApplicationVersion toApplicationVersion(
             CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
             long applicationId) {
+        if (createApplicationVersionRequestDto == null) return null;
         ApplicationVersion applicationVersion = new ApplicationVersion();
         applicationVersion.setApplicationId(applicationId);
         applicationVersion.setMajor(createApplicationVersionRequestDto.major());
@@ -51,6 +54,7 @@ public class ApplicationVersionMapper {
     }
 
     public CreateApplicationVersionResponseDto toCreateApplicationVersionResponseDto(ApplicationVersion applicationVersion) {
+        if (applicationVersion == null) return null;
         return new CreateApplicationVersionResponseDto(
           applicationVersion.getId(),
           applicationVersion.getApplicationId(),
