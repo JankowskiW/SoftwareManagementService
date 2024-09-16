@@ -84,7 +84,6 @@ public class ApplicationController {
     public ResponseEntity<UpdateApplicationResponseDto> partiallyUpdateApplication(
             @PathVariable long id,
             @RequestBody UpdateApplicationRequestDto updateApplicationRequestDto) {
-        // TODO: It should be changed to PartiallyUpdate and also POST update should be updated to fullyUpdate but it should be just one UpdateUserRequest and UpdateUserResponse dtos as in Users
         log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
                 "PATCH", "/applications/{id}", updateApplicationRequestDto.toString(), "id: " + id);
         UpdateApplicationResponseDto updateApplicationResponseDto

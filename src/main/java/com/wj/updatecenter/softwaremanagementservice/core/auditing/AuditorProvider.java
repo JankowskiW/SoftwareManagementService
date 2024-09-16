@@ -12,14 +12,7 @@ public class AuditorProvider implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        // TODO: Change to specific user authenticated in spring security
-        return Optional.of(1L);
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        if (authentication == null || !authentication.isAuthenticated()) {
-//            return Optional.empty();
-//        }
-//
-//        return Optional.of(authenticatedUser);
+        long id = 1L;
+        return Optional.of(id);
     }
 }

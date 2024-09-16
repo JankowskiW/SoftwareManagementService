@@ -3,6 +3,9 @@ package com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -31,12 +34,16 @@ public class ApplicationVersion {
     @Column(nullable = false)
     private String changelog;
     @Column(nullable = false)
+    @CreatedDate
     private long createdBy;
     @Column(nullable = false)
+    @CreatedDate
     private LocalDateTime createdAt;
     @Column(nullable = false)
+    @LastModifiedBy
     private long updatedBy;
     @Column(nullable = false)
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     public String getFullVersion() {
