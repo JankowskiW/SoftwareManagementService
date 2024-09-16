@@ -24,21 +24,6 @@ public class ApplicationVersionService {
     private final ApplicationVersionMapper applicationVersionMapper;
     private final ApplicationVersionValidator applicationVersionValidator;
 
-    public Optional<GetApplicationVersionDetailsDto> getCurrentApplicationVersionDetails(long applicationId) {
-        Optional<ApplicationVersion> applicationVersion =
-                applicationVersionRepository.findByApplicationIdAndCurrent(applicationId, true);
-        return applicationVersion.map(applicationVersionMapper::toGetApplicationVersionDetailsDto);
-    }
-
-    public GetApplicationVersionDetailsDto getApplicationVersionDetails(long id) {
-        ApplicationVersion applicationVersion = applicationVersionRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.notFound(
-                        CommonApplicationVersionValidator.ENTITY_NAME,
-                        CommonApplicationVersionValidator.ID_FIELD_NAME,
-                        id));
-        return applicationVersionMapper.toGetApplicationVersionDetailsDto(applicationVersion);
-    }
-
     public Page<GetSimplifiedApplicationVersionResponseDto> getApplicationVersions(
             Pageable pageable, long applicationId) {
         Page<ApplicationVersion> applicationVersionsPage =
@@ -62,6 +47,21 @@ public class ApplicationVersionService {
                 .toApplicationVersion(createApplicationVersionRequestDto, applicationId);
         applicationVersion = applicationVersionRepository.save(applicationVersion);
         return applicationVersionMapper.toCreateApplicationVersionResponseDto(applicationVersion);
+    }
+
+    public Optional<GetApplicationVersionDetailsDto> getCurrentApplicationVersionDetails(long applicationId) {
+        Optional<ApplicationVersion> applicationVersion =
+                applicationVersionRepository.findByApplicationIdAndCurrent(applicationId, true);
+        return applicationVersion.map(applicationVersionMapper::toGetApplicationVersionDetailsDto);
+    }
+
+    public GetApplicationVersionDetailsDto getApplicationVersionDetails(long id) {
+        ApplicationVersion applicationVersion = applicationVersionRepository.findById(id)
+                .orElseThrow(() -> ResourceNotFoundException.notFound(
+                        CommonApplicationVersionValidator.ENTITY_NAME,
+                        CommonApplicationVersionValidator.ID_FIELD_NAME,
+                        id));
+        return applicationVersionMapper.toGetApplicationVersionDetailsDto(applicationVersion);
     }
 
     public void deleteApplicationVersion(long id) {

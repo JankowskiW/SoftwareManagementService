@@ -12,6 +12,7 @@ import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.A
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionRequestDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionResponseDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
+import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetSimplifiedApplicationVersionResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -93,5 +94,9 @@ public class ApplicationService {
         application.setCurrentVersion(createApplicationVersionResponseDto.getFullVersion());
         applicationRepository.save(application);
         return createApplicationVersionResponseDto;
+    }
+
+    public Page<GetSimplifiedApplicationVersionResponseDto> getApplicationVersions(Pageable pageable, long id) {
+        return applicationVersionService.getApplicationVersions(pageable, id);
     }
 }

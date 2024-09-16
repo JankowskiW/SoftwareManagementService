@@ -22,6 +22,10 @@ public class SoftwareManagementPaginationHelper {
         log.info("Default sort = {}", DEFAULT_SORT);
     }
 
+    public Pageable convertToPageable(int pageNumber, int pageSize) {
+        return paginationHelper.convertToPageable(pageNumber, pageSize, DEFAULT_SORT);
+    }
+
     public Pageable convertToPageable(int pageNumber, int pageSize, String sort) {
         return paginationHelper.convertToPageable(pageNumber, pageSize, sort);
     }

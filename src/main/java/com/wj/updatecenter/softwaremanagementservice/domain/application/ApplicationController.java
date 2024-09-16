@@ -4,6 +4,7 @@ import com.wj.updatecenter.softwaremanagementservice.core.helper.SoftwareManagem
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.*;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionRequestDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionResponseDto;
+import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetSimplifiedApplicationVersionResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -41,8 +42,7 @@ public class ApplicationController {
             @RequestParam(defaultValue = DEFAULT_SORT) String sort,
             @RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) int pageNumber,
             @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize) {
-        log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
-                "GET", "/applications", "", "");
+        log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE, "GET", "/applications", "", "");
         log.info("With filter parameters: name: {}, productOwnerId: {}, assigneeId: {}, archived: {}",
                 name, productOwnerId, assigneeId, archived);
         log.info("With pageNumber: {}, pageSize: {}", pageNumber, pageSize);
@@ -50,8 +50,7 @@ public class ApplicationController {
         Pageable pageable = softwareManagementPaginationHelper.convertToPageable(pageNumber, pageSize, sort);
         Page<GetSimplifiedApplicationResponseDto> getSimplifiedApplicationResponseDtos =
                 applicationService.getApplications(pageable, name, productOwnerId, assigneeId, archived);
-        log.info(GET_REQUEST_LOG_MESSAGE_TEMPLATE,
-                "Applications page", getSimplifiedApplicationResponseDtos.toString());
+        log.info(GET_REQUEST_LOG_MESSAGE_TEMPLATE, "Applications page", "size: " + getSimplifiedApplicationResponseDtos.getSize());
         return ResponseEntity.ok(getSimplifiedApplicationResponseDtos);
     }
 
@@ -106,11 +105,25 @@ public class ApplicationController {
     public ResponseEntity<CreateApplicationVersionResponseDto> addVersionToApplication(
             @PathVariable long id,
             @RequestBody CreateApplicationVersionRequestDto createApplicationVersionRequestDto) {
-        log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE,
-                "PATCH", "/applications/{id}/application-versions", createApplicationVersionRequestDto.toString(), "id: " + id);
+        log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE, "PATCH", "/applications/{id}/application-versions",
+                createApplicationVersionRequestDto.toString(), "id: " + id);
         CreateApplicationVersionResponseDto createApplicationVersionResponseDto =
                 applicationService.addVersionToApplication(createApplicationVersionRequestDto, id);
         log.info(PATCH_REQUEST_LOG_MESSAGE_TEMPLATE, "Application", "id: " + id);
         return ResponseEntity.ok(createApplicationVersionResponseDto);
+    }
+
+    @GetMapping("/{id}/application-versions")
+    public ResponseEntity<Page<GetSimplifiedApplicationVersionResponseDto>> getApplicationVersions(
+            @PathVariable long id,
+            @RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) int pageNumber,
+            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int pageSize) {
+        log.info(RECEIVED_REQUEST_LOG_MESSAGE_TEMPLATE, "GET", "/applications/{id}/application-versions", "", "id: " + id);
+        log.info("With pageNumber: {}, pageSize: {}", pageNumber, pageSize);
+        Pageable pageable = softwareManagementPaginationHelper.convertToPageable(pageNumber, pageSize);
+        Page<GetSimplifiedApplicationVersionResponseDto> getSimplifiedApplicationVersionResponseDtos
+                = applicationService.getApplicationVersions(pageable, id);
+        log.info(GET_REQUEST_LOG_MESSAGE_TEMPLATE, "ApplicationVersion", "size: " + getSimplifiedApplicationVersionResponseDtos.getSize());
+        return ResponseEntity.ok(getSimplifiedApplicationVersionResponseDtos);
     }
 }
