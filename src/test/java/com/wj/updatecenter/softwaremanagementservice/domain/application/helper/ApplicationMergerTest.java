@@ -426,7 +426,7 @@ class ApplicationMergerTest {
 
         // then
         assertThat(result.getCurrentVersion())
-                .isEqualTo(DUMMY_APPLICATION_CURRENT_VERSION);
+                .isEqualTo(DUMMY_VERSION_FULL);
     }
 
     @Test
