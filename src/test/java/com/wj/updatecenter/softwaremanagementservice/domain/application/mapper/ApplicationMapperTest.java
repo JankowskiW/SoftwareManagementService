@@ -176,4 +176,29 @@ class ApplicationMapperTest {
                 .usingRecursiveComparison()
                 .isEqualTo(expectedResult);
     }
+
+    @Test
+    void shouldReturnNullInsteadOfUpdateApplicationResponseDtoWhenApplicationIsNull() {
+        // given && when
+        UpdateApplicationResponseDto result = applicationMapper.toUpdateApplicationResponseDto(null);
+
+        // then
+        assertThat(result)
+                .isNull();
+    }
+
+    @Test
+    void shouldReturnUpdateApplicationResponseDtoWhenApplicationIsNotNull() {
+        // given
+        Application application = createDummyApplication(DUMMY_APPLICATION_ID);
+        UpdateApplicationResponseDto expectedResult = createDummyUpdateApplicationResponseDto(DUMMY_APPLICATION_ID);
+
+        // when
+        UpdateApplicationResponseDto result = applicationMapper.toUpdateApplicationResponseDto(application);
+
+        // then
+        assertThat(result)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedResult);
+    }
 }
