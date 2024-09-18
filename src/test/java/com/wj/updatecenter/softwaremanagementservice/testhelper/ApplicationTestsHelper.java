@@ -36,6 +36,39 @@ public class ApplicationTestsHelper {
     public static final long DUMMY_VERSION_UPDATED_BY = 2L;
     public static final LocalDateTime DUMMY_VERSION_UPDATED_AT = LocalDateTime.of(2024, 1, 27, 23, 23, 23);
 
+
+    public static UpdateApplicationResponseDto createDummyUpdateApplicationResponseDto(long id, String name) {
+        return new UpdateApplicationResponseDto(
+                id,
+                name,
+                DUMMY_APPLICATION_DESCRIPTION,
+                DUMMY_APPLICATION_REPOSITORY_URL,
+                DUMMY_APPLICATION_DOCUMENTATION_URL,
+                DUMMY_APPLICATION_BUSINESS_OWNER_ID,
+                DUMMY_APPLICATION_ASSIGNEE_ID,
+                DUMMY_APPLICATION_CREATED_BY,
+                DUMMY_APPLICATION_CREATED_AT,
+                DUMMY_APPLICATION_UPDATED_BY,
+                DUMMY_APPLICATION_UPDATED_AT
+        );
+    }
+
+    public static UpdateApplicationResponseDto createDummyUpdateApplicationResponseDto(long id) {
+        return new UpdateApplicationResponseDto(
+                id,
+                DUMMY_APPLICATION_NAME,
+                DUMMY_APPLICATION_DESCRIPTION,
+                DUMMY_APPLICATION_REPOSITORY_URL,
+                DUMMY_APPLICATION_DOCUMENTATION_URL,
+                DUMMY_APPLICATION_BUSINESS_OWNER_ID,
+                DUMMY_APPLICATION_ASSIGNEE_ID,
+                DUMMY_APPLICATION_CREATED_BY,
+                DUMMY_APPLICATION_CREATED_AT,
+                DUMMY_APPLICATION_UPDATED_BY,
+                DUMMY_APPLICATION_UPDATED_AT
+        );
+    }
+
     public static UpdateApplicationRequestDto createDummyUpdateApplicationRequestDto() {
         return new UpdateApplicationRequestDto(
                 DUMMY_APPLICATION_NAME,
