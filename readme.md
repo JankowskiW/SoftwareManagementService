@@ -87,6 +87,21 @@ This includes retrieving and deleting version.
     - **Application archiving**: When the **archived** field is set to **true**, the **archivedAt** and **archivedBy**
       fields will be updated in method annotated as **@PreUpdate** to reflect the current values of **updatedAt**
       and **updatedBy**.
+    - **ApplicationMerger**: he ApplicationMerger is designed to update only the desired fields of the Application entity. 
+      Please note that some fields, despite having the same data types, exhibit different behaviors:
+      - **Name**: The name must not be null, empty, or blank in order to update.
+      - **Description**: The description must not be null, empty, or blank in order to update.
+      - **RepositoryUrl**: The repository URL must not be null, empty, or blank in order to update.
+      - **DocumentationUrl**: The documentation URL must not be null. 
+        If the documentation URL is empty, it signifies the intent to remove it from the entity.
+      - **BusinessOwnerId**: The business owner ID must not be null. 
+        If the ID is set to 0, it indicates that no business owner is assigned to the application.
+      - **AssigneeId**: The assignee ID must not be null. If set to 0, 
+        it means no developer (assignee) is responsible for the application.
+      - **CurrentVersion**: The current version must not be null. If left empty, 
+        it indicates that the application has no current version yet.
+      - **Archived**: The archived flag must not be null. 
+        You can set it to true or false to either archive the application or restore it.
 - **Delete Application**:
     - **Cascade Deletion**: Deleting an application will also remove all associated application 
       versions from the **application_versions** table.
@@ -309,6 +324,6 @@ Work in progress...
 - Added **ApplicationVersion Module** operations independent of specific applications, including:
   - Fetching version details.
   - Deleting application versions.
-  - 
+  
 ## Useful materials
 Work in progress...
