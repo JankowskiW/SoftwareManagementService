@@ -44,9 +44,9 @@ public class ApplicationService {
     }
 
     public Page<GetSimplifiedApplicationResponseDto> getApplications(
-            Pageable pageable, String name, long productOwner, long assigneeId, boolean archived) {
+            Pageable pageable, String name, Long businessOwnerId, Long assigneeId, boolean archived) {
         Specification<Application> specification =
-                applicationSpecificationBuilder.build(name, productOwner, assigneeId, archived);
+                applicationSpecificationBuilder.build(name, businessOwnerId, assigneeId, archived);
         Page<Application> applicationsPage = applicationRepository.findAll(specification, pageable);
         return applicationsPage.map(applicationMapper::toGetSimplifiedApplicationResponseDto);
     }
@@ -73,7 +73,8 @@ public class ApplicationService {
                         CommonApplicationValidator.ENTITY_NAME, CommonApplicationValidator.ID_FIELD_NAME, id));
         applicationValidator.validateUpdateRequest(updateApplicationRequestDto, originalApplication.getId());
         Application applicationToUpdate = applicationMapper.toApplication(updateApplicationRequestDto, id);
-        Application application = applicationRepository.save(applicationMerger.merge(originalApplication, applicationToUpdate));
+        Application mergedApplication = applicationMerger.merge(originalApplication, applicationToUpdate);
+        Application application = applicationRepository.save(mergedApplication);
         return applicationMapper.toUpdateApplicationResponseDto(application);
     }
 
