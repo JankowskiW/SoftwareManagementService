@@ -114,7 +114,7 @@ class ApplicationMapperTest {
     void shouldReturnApplicationWhenCreateApplicationRequestDtoIsNotNull() {
         // given
         CreateApplicationRequestDto createApplicationRequestDto = createDummyCreateApplicationRequestDto();
-        Application expectedResult = createSimplyDummyApplication();
+        Application expectedResult = createSimpleDummyApplication();
 
         // when
         Application result = applicationMapper.toApplication(createApplicationRequestDto);
@@ -164,7 +164,7 @@ class ApplicationMapperTest {
     void shouldReturnApplicationWhenUpdateApplicationRequestDtoIsNotNull() {
         // given
         UpdateApplicationRequestDto updateApplicationRequestDto = createDummyUpdateApplicationRequestDto();
-        Application expectedResult = createSimplyDummyApplication();
+        Application expectedResult = createSimpleDummyApplication();
         expectedResult.setId(DUMMY_APPLICATION_ID);
         expectedResult.setCurrentVersion(DUMMY_APPLICATION_CURRENT_VERSION);
 

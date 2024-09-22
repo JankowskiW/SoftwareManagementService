@@ -42,7 +42,7 @@ public class ApplicationVersionTestsHelper {
         );
     }
 
-    public static ApplicationVersion createSimplyApplicationVersion() {
+    public static ApplicationVersion createSimpleApplicationVersion() {
         ApplicationVersion applicationVersion = new ApplicationVersion();
         applicationVersion.setApplicationId(DUMMY_VERSION_APPLICATION_ID);
         applicationVersion.setMajor(DUMMY_VERSION_MAJOR);
@@ -93,9 +93,9 @@ public class ApplicationVersionTestsHelper {
                 DUMMY_VERSION_CHANGELOG);
     }
 
-    public static CreateApplicationVersionResponseDto createDummyCreateApplicationVersionResponseDto() {
+    public static CreateApplicationVersionResponseDto createDummyCreateApplicationVersionResponseDto(long id) {
         return new CreateApplicationVersionResponseDto(
-                DUMMY_VERSION_ID,
+                id,
                 DUMMY_VERSION_APPLICATION_ID,
                 DUMMY_VERSION_MAJOR,
                 DUMMY_VERSION_MINOR,

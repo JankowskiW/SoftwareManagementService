@@ -140,7 +140,7 @@ class ApplicationServiceTest {
     @Test
     void shouldReturnOneGetSimplifiedApplicationResponseDtoWhenRepositoryFindAllMethodReturnsOneApplication() {
         // given
-        Pageable pageable = PageRequest.of(1,1);
+        Pageable pageable = PageRequest.of(1,25);
         Application application = createDummyApplication(DUMMY_APPLICATION_ID);
         GetSimplifiedApplicationResponseDto getSimplifiedApplicationResponseDto =
                 createDummyGetSimplifiedApplicationResponseDtoWithoutCurrentVersion(DUMMY_APPLICATION_ID);
@@ -163,7 +163,7 @@ class ApplicationServiceTest {
     @Test
     void shouldReturnGetSimplifiedApplicationResponseDtosWhenRepositoryFindAllMethodReturnsMoreThanOneApplication() {
         // given
-        Pageable pageable = PageRequest.of(1,1);
+        Pageable pageable = PageRequest.of(1,25);
         List<Application> applications = List.of(
                 createDummyApplication(1L),
                 createDummyApplication(2L)
@@ -193,7 +193,7 @@ class ApplicationServiceTest {
     void shouldReturnCreateApplicationResponseDtoWhenCreateApplicationRequestDtoIsValid() {
         // given
         CreateApplicationRequestDto createApplicationRequestDto = createDummyCreateApplicationRequestDto();
-        Application mappedApplication = createSimplyDummyApplication();
+        Application mappedApplication = createSimpleDummyApplication();
         Application savedApplication = createDummyApplication(DUMMY_APPLICATION_ID);
         CreateApplicationResponseDto createApplicationResponseDto =
                 createDummyCreateApplicationResponseDto(DUMMY_APPLICATION_ID);
@@ -234,7 +234,7 @@ class ApplicationServiceTest {
     void shouldReturnUpdateApplicationResponseDtoWhenFullyUpdateApplicationRequestDtoIsValid() {
         // given
         UpdateApplicationRequestDto updateApplicationRequestDto = createDummyUpdateApplicationRequestDto();
-        Application mappedApplication = createSimplyDummyApplication();
+        Application mappedApplication = createSimpleDummyApplication();
         mappedApplication.setId(DUMMY_APPLICATION_ID);
         Application savedApplication = createDummyApplication(DUMMY_APPLICATION_ID);
         UpdateApplicationResponseDto updateApplicationResponseDto = createDummyUpdateApplicationResponseDto(DUMMY_APPLICATION_ID);
@@ -419,9 +419,9 @@ class ApplicationServiceTest {
         CreateApplicationVersionRequestDto createApplicationVersionRequestDto =
                 createDummyCreateApplicationVersionRequestDto();
         CreateApplicationVersionResponseDto createApplicationVersionResponseDto =
-                createDummyCreateApplicationVersionResponseDto();
+                createDummyCreateApplicationVersionResponseDto(DUMMY_VERSION_ID);
         CreateApplicationVersionResponseDto expectedResult =
-                createDummyCreateApplicationVersionResponseDto();
+                createDummyCreateApplicationVersionResponseDto(DUMMY_VERSION_ID);
         Application application = createDummyApplication(DUMMY_APPLICATION_ID);
         given(applicationRepository.findById(anyLong()))
                 .willReturn(Optional.of(application));
@@ -447,7 +447,7 @@ class ApplicationServiceTest {
         CreateApplicationVersionRequestDto createApplicationVersionRequestDto =
                 createDummyCreateApplicationVersionRequestDto();
         CreateApplicationVersionResponseDto createApplicationVersionResponseDto =
-                createDummyCreateApplicationVersionResponseDto();
+                createDummyCreateApplicationVersionResponseDto(DUMMY_VERSION_ID);
         Application application = createDummyApplication(DUMMY_APPLICATION_ID);
         application.setCurrentVersion(createApplicationVersionResponseDto.getFullVersion());
         given(applicationRepository.findById(anyLong()))

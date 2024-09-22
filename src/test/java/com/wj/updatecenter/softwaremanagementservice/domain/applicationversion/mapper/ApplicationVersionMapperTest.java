@@ -70,7 +70,7 @@ class ApplicationVersionMapperTest {
     void shouldReturnApplicationVersionWhenCreateApplicationVersionRequestDtoIsNotNull() {
         // given
         CreateApplicationVersionRequestDto createApplicationVersionRequestDto = createDummyCreateApplicationVersionRequestDto();
-        ApplicationVersion expectedResult = createSimplyApplicationVersion();
+        ApplicationVersion expectedResult = createSimpleApplicationVersion();
 
         // when
         ApplicationVersion result = applicationVersionMapper.toApplicationVersion(createApplicationVersionRequestDto, DUMMY_VERSION_ID);
@@ -94,7 +94,8 @@ class ApplicationVersionMapperTest {
     void shouldReturnCreateApplicationVersionResponseDtoWhenApplicationVersionIsNotNull() {
         // given
         ApplicationVersion applicationVersion = createDummyApplicationVersion(DUMMY_VERSION_ID);
-        CreateApplicationVersionResponseDto expectedResult = createDummyCreateApplicationVersionResponseDto();
+        CreateApplicationVersionResponseDto expectedResult =
+                createDummyCreateApplicationVersionResponseDto(DUMMY_VERSION_ID);
 
         // when
         CreateApplicationVersionResponseDto result = applicationVersionMapper.toCreateApplicationVersionResponseDto(applicationVersion);

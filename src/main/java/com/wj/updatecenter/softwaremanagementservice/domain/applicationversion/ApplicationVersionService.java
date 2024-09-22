@@ -36,15 +36,15 @@ public class ApplicationVersionService {
             CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
             long applicationId) {
         applicationVersionValidator.validateCreateRequest(createApplicationVersionRequestDto, applicationId);
-        Optional<ApplicationVersion> currentApplicationVersion = applicationVersionRepository
-                .findByApplicationIdAndCurrent(applicationId, true);
+        Optional<ApplicationVersion> currentApplicationVersion =
+                applicationVersionRepository.findByApplicationIdAndCurrent(applicationId, true);
         if (currentApplicationVersion.isPresent()) {
             ApplicationVersion applicationVersion = currentApplicationVersion.get();
             applicationVersion.setCurrent(false);
             applicationVersionRepository.save(applicationVersion);
         }
-        ApplicationVersion applicationVersion = applicationVersionMapper
-                .toApplicationVersion(createApplicationVersionRequestDto, applicationId);
+        ApplicationVersion applicationVersion =
+                applicationVersionMapper.toApplicationVersion(createApplicationVersionRequestDto, applicationId);
         applicationVersion = applicationVersionRepository.save(applicationVersion);
         return applicationVersionMapper.toCreateApplicationVersionResponseDto(applicationVersion);
     }

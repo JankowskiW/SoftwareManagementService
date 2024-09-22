@@ -159,7 +159,7 @@ public class ApplicationTestsHelper {
         return application;
     }
 
-    public static Application createSimplyDummyApplication() {
+    public static Application createSimpleDummyApplication() {
         Application application = new Application();
         application.setName(DUMMY_APPLICATION_NAME);
         application.setDescription(DUMMY_APPLICATION_DESCRIPTION);
