@@ -3,13 +3,15 @@ package com.wj.updatecenter.softwaremanagementservice.testhelper;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Application;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.*;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ApplicationTestsHelper {
     public static final long DUMMY_COMMON_ID = 1L;
@@ -43,6 +45,28 @@ public class ApplicationTestsHelper {
 
     public static final String OLD_STRING_VALUE = "old-value";
     public static final String NEW_STRING_VALUE = "new-value";
+
+    public static final Map<String, BiConsumer<Application, Object>> APPLICATION_FIELD_SETTERS = new HashMap<>();
+    public static final Map<String, Function<Application, Object>> APPLICATION_FIELD_GETTERS = new HashMap<>();
+
+
+    static {
+        APPLICATION_FIELD_SETTERS.put("name", (app, value) -> app.setName((String) value));
+        APPLICATION_FIELD_SETTERS.put("description", (app, value) -> app.setDescription((String) value));
+        APPLICATION_FIELD_SETTERS.put("repositoryUrl", (app, value) -> app.setRepositoryUrl((String) value));
+        APPLICATION_FIELD_SETTERS.put("documentationUrl", (app, value) -> app.setDocumentationUrl((String) value));
+        APPLICATION_FIELD_SETTERS.put("currentVersion", (app, value) -> app.setCurrentVersion((String) value));
+        APPLICATION_FIELD_SETTERS.put("businessOwnerId", (app, value) -> app.setBusinessOwnerId((Long) value));
+        APPLICATION_FIELD_SETTERS.put("assigneeId", (app, value) -> app.setAssigneeId((Long) value));
+
+        APPLICATION_FIELD_GETTERS.put("name", Application::getName);
+        APPLICATION_FIELD_GETTERS.put("description", Application::getDescription);
+        APPLICATION_FIELD_GETTERS.put("repositoryUrl", Application::getRepositoryUrl);
+        APPLICATION_FIELD_GETTERS.put("documentationUrl", Application::getDocumentationUrl);
+        APPLICATION_FIELD_GETTERS.put("currentVersion", Application::getCurrentVersion);
+        APPLICATION_FIELD_GETTERS.put("businessOwnerId", Application::getBusinessOwnerId);
+        APPLICATION_FIELD_GETTERS.put("assigneeId", Application::getAssigneeId);
+    }
 
     public static UpdateApplicationResponseDto createDummyUpdateApplicationResponseDto(long id, String name) {
         return new UpdateApplicationResponseDto(
@@ -229,22 +253,39 @@ public class ApplicationTestsHelper {
         );
     }
 
-    public static Stream<Arguments> testDataForStringUpdateOnlyIfNotNull() {
-        return Stream.of(
-                Arguments.of(null, OLD_STRING_VALUE),
-                Arguments.of("", ""),
-                Arguments.of(" ", " "),
-                Arguments.of(NEW_STRING_VALUE, NEW_STRING_VALUE)
-        );
+    public static Stream<Arguments> testDataForUpdateStringFields() {
+        return Stream.concat(
+                testDataForStringUpdateOnlyIfNotNull(),
+                testDataForStringUpdateOnlyIfHasText());
     }
 
-    public static Stream<Arguments> testDataForStringUpdateOnlyIfHasText() {
-        return Stream.of(
-                Arguments.of(null, OLD_STRING_VALUE),
-                Arguments.of("", OLD_STRING_VALUE),
-                Arguments.of(" ", OLD_STRING_VALUE),
-                Arguments.of(NEW_STRING_VALUE, NEW_STRING_VALUE)
-        );
+    private static Stream<Arguments> testDataForStringUpdateOnlyIfHasText() {
+        List<String> fieldNames = List.of("documentationUrl", "currentVersion");
+        return fieldNames.stream().flatMap(fieldName -> Stream.of(
+                Arguments.of(null, OLD_STRING_VALUE, fieldName),
+                Arguments.of("", "", fieldName),
+                Arguments.of(" ", " ", fieldName),
+                Arguments.of(NEW_STRING_VALUE, NEW_STRING_VALUE, fieldName)
+        ));
+    }
+
+    private static Stream<Arguments> testDataForStringUpdateOnlyIfNotNull() {
+        List<String> fieldNames = List.of("name", "description", "repositoryUrl");
+        return fieldNames.stream().flatMap(fieldName -> Stream.of(
+                Arguments.of(null, OLD_STRING_VALUE, fieldName),
+                Arguments.of("", OLD_STRING_VALUE, fieldName),
+                Arguments.of(" ", OLD_STRING_VALUE, fieldName),
+                Arguments.of(NEW_STRING_VALUE, NEW_STRING_VALUE, fieldName)
+        ));
+    }
+
+    public static Stream<Arguments> testDataForUpdateIds() {
+        List<String> fieldNames = List.of("businessOwnerId", "assigneeId");
+        return fieldNames.stream().flatMap(fieldName -> Stream.of(
+                Arguments.of(0L, 0L, fieldName),
+                Arguments.of(999L, 999L, fieldName),
+                Arguments.of(null, DUMMY_COMMON_ID, fieldName)
+        ));
     }
 
     public static Stream<Arguments> archivedTestData() {
@@ -255,17 +296,18 @@ public class ApplicationTestsHelper {
         );
     }
 
-    public static Stream<Arguments> idsTestData() {
-        return Stream.of(
-                Arguments.of(0L, 0L),
-                Arguments.of(999L, 999L),
-                Arguments.of(null, DUMMY_COMMON_ID)
-        );
+    public static Application createApplicationWithField(String fieldName, String value) {
+        Application application = new Application();
+        setFieldValue(application, fieldName, value);
+        return application;
     }
 
-    public static void assertThatIllegalArgumentExceptionWasThrown(ThrowableAssert.ThrowingCallable throwingCallable) {
-        assertThatThrownBy(throwingCallable)
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Applications cannot be null");
+    public static void setFieldValue(Application application, String fieldName, Object value) {
+        BiConsumer<Application, Object> setter = APPLICATION_FIELD_SETTERS.get(fieldName);
+        if (setter != null) {
+            setter.accept(application, value);
+        } else {
+            throw new IllegalArgumentException("Invalid field name: " + fieldName);
+        }
     }
 }
