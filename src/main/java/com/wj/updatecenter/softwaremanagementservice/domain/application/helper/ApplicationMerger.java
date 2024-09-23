@@ -4,36 +4,43 @@ import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Ap
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.function.Consumer;
+
 @Component
 public class ApplicationMerger {
     public Application merge(Application originalApplication, Application applicationToUpdate) {
+        validateApplications(originalApplication, applicationToUpdate);
+
+        updateIfHasText(originalApplication::setName, applicationToUpdate.getName());
+        updateIfHasText(originalApplication::setDescription, applicationToUpdate.getDescription());
+        updateIfHasText(originalApplication::setRepositoryUrl, applicationToUpdate.getRepositoryUrl());
+
+        updateIfNotNull(originalApplication::setDocumentationUrl, applicationToUpdate.getDocumentationUrl());
+        updateIfNotNull(originalApplication::setCurrentVersion, applicationToUpdate.getCurrentVersion());
+
+        updateIfNotNull(originalApplication::setBusinessOwnerId, applicationToUpdate.getBusinessOwnerId());
+        updateIfNotNull(originalApplication::setAssigneeId, applicationToUpdate.getAssigneeId());
+
+        updateIfNotNull(originalApplication::setArchived, applicationToUpdate.getArchived());
+
+        return originalApplication;
+    }
+
+    private void validateApplications(Application originalApplication, Application applicationToUpdate) {
         if (originalApplication == null || applicationToUpdate == null) {
             throw new IllegalArgumentException("Applications cannot be null");
         }
-        if (StringUtils.hasText(applicationToUpdate.getName())) {
-            originalApplication.setName(applicationToUpdate.getName());
+    }
+
+    private void updateIfHasText(Consumer<String> setter, String value) {
+        if (StringUtils.hasText(value)) {
+            setter.accept(value);
         }
-        if (StringUtils.hasText(applicationToUpdate.getDescription())) {
-            originalApplication.setDescription(applicationToUpdate.getDescription());
+    }
+
+    private <T> void updateIfNotNull(Consumer<T> setter, T value) {
+        if (value != null) {
+            setter.accept(value);
         }
-        if (StringUtils.hasText(applicationToUpdate.getRepositoryUrl())) {
-            originalApplication.setRepositoryUrl(applicationToUpdate.getRepositoryUrl());
-        }
-        if (applicationToUpdate.getDocumentationUrl() != null) {
-            originalApplication.setDocumentationUrl(applicationToUpdate.getDocumentationUrl());
-        }
-        if (applicationToUpdate.getBusinessOwnerId() != null) {
-            originalApplication.setBusinessOwnerId(applicationToUpdate.getBusinessOwnerId());
-        }
-        if (applicationToUpdate.getAssigneeId() != null) {
-            originalApplication.setAssigneeId(applicationToUpdate.getAssigneeId());
-        }
-        if (applicationToUpdate.getCurrentVersion() != null) {
-            originalApplication.setCurrentVersion(applicationToUpdate.getCurrentVersion());
-        }
-        if (applicationToUpdate.getArchived() != null) {
-            originalApplication.setArchived(applicationToUpdate.getArchived());
-        }
-        return originalApplication;
     }
 }

@@ -3,18 +3,23 @@ package com.wj.updatecenter.softwaremanagementservice.testhelper;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Application;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.*;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
+import org.assertj.core.api.ThrowableAssert;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ApplicationTestsHelper {
-
-    public static final long DUMMY_APPLICATION_ID = 1L;
+    public static final long DUMMY_COMMON_ID = 1L;
+    public static final long DUMMY_APPLICATION_ID = DUMMY_COMMON_ID;
     public static final String DUMMY_APPLICATION_NAME = "Dummy Application";
     public static final String DUMMY_APPLICATION_DESCRIPTION = "Dummy Description";
     public static final String DUMMY_APPLICATION_REPOSITORY_URL = "https://github.com/user/repo";
     public static final String DUMMY_APPLICATION_DOCUMENTATION_URL = "ftp://192.168.0.1";
-    public static final long DUMMY_APPLICATION_BUSINESS_OWNER_ID = 11L;
-    public static final long DUMMY_APPLICATION_ASSIGNEE_ID = 21L;
+    public static final long DUMMY_APPLICATION_BUSINESS_OWNER_ID = DUMMY_COMMON_ID;
+    public static final long DUMMY_APPLICATION_ASSIGNEE_ID = DUMMY_COMMON_ID;
     public static final String DUMMY_APPLICATION_CURRENT_VERSION = "1.2.3.4";
     public static final long DUMMY_APPLICATION_CREATED_BY = 1L;
     public static final long DUMMY_APPLICATION_UPDATED_BY = 2L;
@@ -36,6 +41,8 @@ public class ApplicationTestsHelper {
     public static final long DUMMY_VERSION_UPDATED_BY = 2L;
     public static final LocalDateTime DUMMY_VERSION_UPDATED_AT = LocalDateTime.of(2024, 1, 27, 23, 23, 23);
 
+    public static final String OLD_STRING_VALUE = "old-value";
+    public static final String NEW_STRING_VALUE = "new-value";
 
     public static UpdateApplicationResponseDto createDummyUpdateApplicationResponseDto(long id, String name) {
         return new UpdateApplicationResponseDto(
@@ -212,5 +219,53 @@ public class ApplicationTestsHelper {
                 DUMMY_VERSION_CREATED_BY,
                 DUMMY_VERSION_CREATED_AT
         );
+    }
+
+    public static Stream<Arguments> testDataForArgumentsValidation() {
+        return Stream.of(
+                Arguments.of(null, null),
+                Arguments.of(new Application(), null),
+                Arguments.of(null, new Application())
+        );
+    }
+
+    public static Stream<Arguments> testDataForStringUpdateOnlyIfNotNull() {
+        return Stream.of(
+                Arguments.of(null, OLD_STRING_VALUE),
+                Arguments.of("", ""),
+                Arguments.of(" ", " "),
+                Arguments.of(NEW_STRING_VALUE, NEW_STRING_VALUE)
+        );
+    }
+
+    public static Stream<Arguments> testDataForStringUpdateOnlyIfHasText() {
+        return Stream.of(
+                Arguments.of(null, OLD_STRING_VALUE),
+                Arguments.of("", OLD_STRING_VALUE),
+                Arguments.of(" ", OLD_STRING_VALUE),
+                Arguments.of(NEW_STRING_VALUE, NEW_STRING_VALUE)
+        );
+    }
+
+    public static Stream<Arguments> archivedTestData() {
+        return Stream.of(
+                Arguments.of(true, true),
+                Arguments.of(false, false),
+                Arguments.of(null, DUMMY_APPLICATION_ARCHIVED)
+        );
+    }
+
+    public static Stream<Arguments> idsTestData() {
+        return Stream.of(
+                Arguments.of(0L, 0L),
+                Arguments.of(999L, 999L),
+                Arguments.of(null, DUMMY_COMMON_ID)
+        );
+    }
+
+    public static void assertThatIllegalArgumentExceptionWasThrown(ThrowableAssert.ThrowingCallable throwingCallable) {
+        assertThatThrownBy(throwingCallable)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Applications cannot be null");
     }
 }
