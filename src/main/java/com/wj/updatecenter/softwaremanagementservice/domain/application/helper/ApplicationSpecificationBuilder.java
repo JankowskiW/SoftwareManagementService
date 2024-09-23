@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 public class ApplicationSpecificationBuilder {
     private final CommonSpecificationBuilder<Application> applicationSpecBuilder;
 
-    public Specification<Application> build(
-            String name, Long businessOwnerId, Long assigneeId, boolean archived) {
+    public Specification<Application> build(String name, Long businessOwnerId, Long assigneeId, boolean archived) {
         Specification<Application> applicationSpecification = Specification.where(null);
+
         if (name != null) {
             applicationSpecification.and(byName(name));
         }
