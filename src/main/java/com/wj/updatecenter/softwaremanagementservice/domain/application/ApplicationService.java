@@ -33,14 +33,10 @@ public class ApplicationService {
     private final ApplicationVersionService applicationVersionService;
 
     public GetApplicationDetailsDto getApplicationDetails(long id) {
-        Application application = applicationRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.notFound(
-                        CommonApplicationValidator.ENTITY_NAME, CommonApplicationValidator.ID_FIELD_NAME, id));
+        Application application = findApplicationById(id);
         Optional<GetApplicationVersionDetailsDto> getApplicationVersionDetailsDto =
                 applicationVersionService.getCurrentApplicationVersionDetails(id);
-        return applicationMapper.toGetApplicationDetailsDto(
-                application,
-                getApplicationVersionDetailsDto.orElse(null));
+        return applicationMapper.toGetApplicationDetailsDto(application, getApplicationVersionDetailsDto.orElse(null));
     }
 
     public Page<GetSimplifiedApplicationResponseDto> getApplications(
@@ -68,9 +64,7 @@ public class ApplicationService {
 
     public UpdateApplicationResponseDto partiallyUpdateApplication(
             UpdateApplicationRequestDto updateApplicationRequestDto, long id) {
-        Application originalApplication = applicationRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.notFound(
-                        CommonApplicationValidator.ENTITY_NAME, CommonApplicationValidator.ID_FIELD_NAME, id));
+        Application originalApplication = findApplicationById(id);
         applicationValidator.validateUpdateRequest(updateApplicationRequestDto, originalApplication.getId());
         Application applicationToUpdate = applicationMapper.toApplication(updateApplicationRequestDto, id);
         Application mergedApplication = applicationMerger.merge(originalApplication, applicationToUpdate);
@@ -87,11 +81,8 @@ public class ApplicationService {
 
     @Transactional
     public CreateApplicationVersionResponseDto addVersionToApplication(
-            CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
-            long id) {
-        Application application = applicationRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.notFound(
-                        CommonApplicationValidator.ENTITY_NAME, CommonApplicationValidator.ID_FIELD_NAME, id));
+            CreateApplicationVersionRequestDto createApplicationVersionRequestDto, long id) {
+        Application application = findApplicationById(id);
         CreateApplicationVersionResponseDto createApplicationVersionResponseDto =
                 applicationVersionService.createApplicationVersion(createApplicationVersionRequestDto, id);
         application.setCurrentVersion(createApplicationVersionResponseDto.getFullVersion());
@@ -101,5 +92,12 @@ public class ApplicationService {
 
     public Page<GetSimplifiedApplicationVersionResponseDto> getApplicationVersions(Pageable pageable, long id) {
         return applicationVersionService.getApplicationVersions(pageable, id);
+    }
+
+    private Application findApplicationById(long id) {
+        return applicationRepository.findById(id)
+                .orElseThrow(() -> ResourceNotFoundException
+                        .notFound(CommonApplicationValidator.ENTITY_NAME,
+                                 CommonApplicationValidator.ID_FIELD_NAME, id));
     }
 }
