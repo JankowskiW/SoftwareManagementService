@@ -23,6 +23,7 @@ public class ApplicationVersionTestsHelper {
     public static final LocalDateTime DUMMY_VERSION_CREATED_AT = LocalDateTime.of(2024, 1, 23, 22, 22, 22);
     public static final LocalDateTime DUMMY_VERSION_UPDATED_AT = LocalDateTime.of(2024, 1, 26, 23, 23, 23);
 
+    public static final String DUMMY_EXCEPTION_MESSAGE = "message-that-should-not-be-changed";
 
     public static GetApplicationVersionDetailsDto createDummyGetApplicationVersionDetailsDto(long id) {
         return new GetApplicationVersionDetailsDto(
