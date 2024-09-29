@@ -324,10 +324,7 @@ Work in progress...
 - Added **ApplicationVersion Module** operations independent of specific applications, including:
   - Fetching version details.
   - Deleting application versions.
-
-### Version 1.0.1
-- Added tests for **Application Module**, **ApplicationVersion Module**
-  and **ApplicationVersion Module**
+- Added tests for **Application Module**, **ApplicationVersion Module** and **ApplicationVersion Module**.
   
 ## Useful materials
 Work in progress...
