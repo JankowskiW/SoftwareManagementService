@@ -1,15 +1,7 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application.applicationservicetest;
 
 import com.wj.shared.definition.RequestValidationException;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.ApplicationRepository;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.ApplicationService;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationValidator;
-import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.ApplicationVersionService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationTestsHelper.DUMMY_APPLICATION_ID;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -19,17 +11,7 @@ import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-public class DeleteApplicationTest {
-    @Mock
-    private ApplicationRepository applicationRepository;
-    @Mock
-    private ApplicationValidator applicationValidator;
-    @Mock
-    private ApplicationVersionService applicationVersionService;
-    @InjectMocks
-    private ApplicationService applicationService;
-
+public class DeleteApplicationTest extends ApplicationServiceTest {
 
     @Test
     void shouldThrowExceptionWhenDeleteRequestIsInvalid() {

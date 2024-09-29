@@ -1,13 +1,7 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application.applicationservicetest;
 
-import com.wj.updatecenter.softwaremanagementservice.domain.application.ApplicationService;
-import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.ApplicationVersionService;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetSimplifiedApplicationVersionResponseDto;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -23,13 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
-public class GetApplicationVersionsTest {
-    @Mock
-    private ApplicationVersionService applicationVersionService;
-    @InjectMocks
-    private ApplicationService applicationService;
-
+public class GetApplicationVersionsTest extends ApplicationServiceTest {
 
     @Test
     void shouldReturnEmptyPageWhenApplicationDoesNotHaveAnyVersions() {

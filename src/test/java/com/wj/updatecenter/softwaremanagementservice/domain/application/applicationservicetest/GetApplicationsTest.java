@@ -1,17 +1,9 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application.applicationservicetest;
 
-import com.wj.updatecenter.softwaremanagementservice.domain.application.ApplicationRepository;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.ApplicationService;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationSpecificationBuilder;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.mapper.ApplicationMapper;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Application;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.GetSimplifiedApplicationResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,23 +13,13 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationTestsHelper.*;
+import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationTestsHelper.createDummyApplication;
 import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationTestsHelper.createDummyGetSimplifiedApplicationResponseDtoWithoutCurrentVersion;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
-public class GetApplicationsTest {
-    @Mock
-    private ApplicationRepository applicationRepository;
-    @Mock
-    private ApplicationMapper applicationMapper;
-    @Mock
-    private ApplicationSpecificationBuilder applicationSpecificationBuilder;
-    @InjectMocks
-    private ApplicationService applicationService;
+public class GetApplicationsTest extends ApplicationServiceTest {
 
     private final Pageable pageable = PageRequest.of(1, 25);
     private List<Application> applications;

@@ -1,22 +1,13 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application.applicationservicetest;
 
 import com.wj.shared.definition.RequestValidationException;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.ApplicationRepository;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.ApplicationService;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationValidator;
-import com.wj.updatecenter.softwaremanagementservice.domain.application.mapper.ApplicationMapper;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Application;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.UpdateApplicationRequestDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.UpdateApplicationResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationTestsHelper.*;
-import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationTestsHelper.DUMMY_APPLICATION_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,16 +16,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doNothing;
 
-@ExtendWith(MockitoExtension.class)
-public class FullyUpdateApplicationTest {
-    @Mock
-    private ApplicationRepository applicationRepository;
-    @Mock
-    private ApplicationMapper applicationMapper;
-    @Mock
-    private ApplicationValidator applicationValidator;
-    @InjectMocks
-    private ApplicationService applicationService;
+public class FullyUpdateApplicationTest extends ApplicationServiceTest {
 
     private UpdateApplicationRequestDto updateApplicationRequestDto;
 
