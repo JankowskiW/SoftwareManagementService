@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationTestsHelper.DUMMY_APPLICATION_ID;
 import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationVersionTestsHelper.*;
-import static com.wj.updatecenter.softwaremanagementservice.testhelper.ApplicationVersionTestsHelper.DUMMY_VERSION_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
