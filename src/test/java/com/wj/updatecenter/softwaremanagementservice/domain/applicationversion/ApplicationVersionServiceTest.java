@@ -10,6 +10,7 @@ import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.m
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionResponseDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetSimplifiedApplicationVersionResponseDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,10 +43,17 @@ class ApplicationVersionServiceTest {
     @InjectMocks
     private ApplicationVersionService applicationVersionService;
 
+    private final String exceptionMessage = "message-that-should-not-be-changed";
+    private Pageable pageable;
+
+    @BeforeEach
+    void setUp() {
+        pageable = PageRequest.of(1, 25);
+    }
+
     @Test
     void shouldReturnGetSimplifiedApplicationVersionResponseDtosWhenRepositoryFindAllByApplicationIdReturnsMoreThanOneVersion() {
         // given
-        Pageable pageable = PageRequest.of(1,25);
         List<ApplicationVersion> applicationVersions = List.of(
                 createDummyApplicationVersion(1L),
                 createDummyApplicationVersion(2L)
@@ -73,7 +81,6 @@ class ApplicationVersionServiceTest {
     @Test
     void shouldReturnOneGetSimplifiedApplicationVersionResponseDtosWhenRepositoryFindAllByApplicationIdReturnsOneVersion() {
         // given
-        Pageable pageable = PageRequest.of(1,25);
         GetSimplifiedApplicationVersionResponseDto getSimplifiedApplicationVersionResponseDto =
                 createDummyGetSimplifiedApplicationVersionResponseDto(DUMMY_VERSION_ID);
         given(applicationVersionRepository.findAllByApplicationId(any(Pageable.class), anyLong()))
@@ -93,7 +100,6 @@ class ApplicationVersionServiceTest {
     @Test
     void shouldReturnEmptyPageWhenRepositoryFindAllByApplicationIdReturnsEmptyPage() {
         // given
-        Pageable pageable = PageRequest.of(1,25);
         given(applicationVersionRepository.findAllByApplicationId(any(Pageable.class), anyLong()))
                 .willReturn(new PageImpl<>(List.of()));
 
@@ -109,7 +115,6 @@ class ApplicationVersionServiceTest {
     @Test
     void shouldThrowExceptionWhenCreateApplicationVersionRequestIsInvalid() {
         // given
-        String exceptionMessage = "message-that-should-not-be-changed";
         CreateApplicationVersionRequestDto createApplicationVersionRequestDto =
                 createDummyCreateApplicationVersionRequestDto();
         willThrow(new RequestValidationException(exceptionMessage))
@@ -246,7 +251,6 @@ class ApplicationVersionServiceTest {
     @Test
     void shouldThrowExceptionWhenDeleteVersionRequestIsInvalid() {
         // given
-        String exceptionMessage = "message-that-should-not-be-changed";
         doThrow(new RequestValidationException(exceptionMessage))
                 .when(applicationVersionValidator).validateDeleteRequest(anyLong());
 

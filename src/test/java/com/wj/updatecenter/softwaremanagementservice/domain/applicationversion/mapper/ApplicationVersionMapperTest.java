@@ -39,7 +39,8 @@ class ApplicationVersionMapperTest {
         GetApplicationVersionDetailsDto result = applicationVersionMapper.toGetApplicationVersionDetailsDto(null);
 
         // then
-        assertThat(result).isNull();
+        assertThat(result)
+                .isNull();
     }
 
     @Test
@@ -87,7 +88,8 @@ class ApplicationVersionMapperTest {
         ApplicationVersion result = applicationVersionMapper.toApplicationVersion(null, DUMMY_VERSION_ID);
 
         // then
-        assertThat(result).isNull();
+        assertThat(result)
+                .isNull();
     }
 
     @Test
@@ -112,6 +114,7 @@ class ApplicationVersionMapperTest {
         CreateApplicationVersionResponseDto result = applicationVersionMapper.toCreateApplicationVersionResponseDto(null);
 
         // then
-        assertThat(result).isNull();
+        assertThat(result)
+                .isNull();
     }
 }
