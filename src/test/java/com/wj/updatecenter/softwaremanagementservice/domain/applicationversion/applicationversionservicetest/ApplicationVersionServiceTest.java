@@ -1,5 +1,6 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.applicationversionservicetest;
 
+import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.CommonApplicationValidator;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.ApplicationVersionRepository;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.ApplicationVersionService;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.helper.ApplicationVersionValidator;
@@ -20,6 +21,8 @@ public class ApplicationVersionServiceTest {
     ApplicationVersionMapper applicationVersionMapper;
     @Mock
     ApplicationVersionValidator applicationVersionValidator;
+    @Mock
+    CommonApplicationValidator commonApplicationValidator;
     @InjectMocks
     ApplicationVersionService applicationVersionService;
 

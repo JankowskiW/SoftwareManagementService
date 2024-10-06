@@ -18,7 +18,7 @@ public class CommonApplicationValidator {
 
     public void validateIfNotArchived(long id) {
         if (applicationRepository.existsByIdAndArchived(id, true)) {
-            String message = String.format("Application with id %s is archived", id);
+            String message = String.format("%s is archived (%s: %s)", ENTITY_NAME, ID_FIELD_NAME, id);
             throw new RequestValidationException(message);
         }
     }
