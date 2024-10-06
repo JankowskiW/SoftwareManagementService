@@ -1,6 +1,6 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application;
 
-import com.wj.shared.definition.ResourceNotFoundException;
+import com.wj.shared.definition.RequestValidationException;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationMerger;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationSpecificationBuilder;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.ApplicationValidator;
@@ -96,7 +96,7 @@ public class ApplicationService {
 
     private Application findApplicationById(long id) {
         return applicationRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException
+                .orElseThrow(() -> RequestValidationException
                         .notFound(CommonApplicationValidator.ENTITY_NAME,
                                  CommonApplicationValidator.ID_FIELD_NAME, id));
     }

@@ -1,6 +1,6 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application.applicationservicetest;
 
-import com.wj.shared.definition.ResourceNotFoundException;
+import com.wj.shared.definition.RequestValidationException;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Application;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.dto.GetApplicationDetailsDto;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
@@ -34,7 +34,7 @@ public class GetApplicationDetailsTest extends ApplicationServiceTest {
 
         // when && then
         assertThatThrownBy(() -> applicationService.getApplicationDetails(DUMMY_APPLICATION_ID))
-                .isInstanceOf(ResourceNotFoundException.class)
+                .isInstanceOf(RequestValidationException.class)
                 .hasMessage("Application does not exist (id: " + DUMMY_APPLICATION_ID + ")");
     }
 

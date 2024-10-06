@@ -1,7 +1,6 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.application.applicationservicetest;
 
 import com.wj.shared.definition.RequestValidationException;
-import com.wj.shared.definition.ResourceNotFoundException;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.CommonApplicationValidator;
 import com.wj.updatecenter.softwaremanagementservice.domain.application.model.Application;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.CreateApplicationVersionRequestDto;
@@ -30,7 +29,7 @@ public class AddVersionToApplicationTest extends ApplicationServiceTest {
 
         // when && then
         assertThatThrownBy(() -> applicationService.addVersionToApplication(createApplicationVersionRequestDto, DUMMY_APPLICATION_ID))
-                .isInstanceOf(ResourceNotFoundException.class)
+                .isInstanceOf(RequestValidationException.class)
                 .hasMessageContainingAll(
                         CommonApplicationValidator.ENTITY_NAME,
                         CommonApplicationValidator.ID_FIELD_NAME,

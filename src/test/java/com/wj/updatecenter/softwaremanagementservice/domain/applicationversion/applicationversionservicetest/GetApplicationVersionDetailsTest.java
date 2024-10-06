@@ -1,6 +1,6 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.applicationversionservicetest;
 
-import com.wj.shared.definition.ResourceNotFoundException;
+import com.wj.shared.definition.RequestValidationException;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.helper.CommonApplicationVersionValidator;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.ApplicationVersion;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.model.dto.GetApplicationVersionDetailsDto;
@@ -26,7 +26,7 @@ public class GetApplicationVersionDetailsTest extends ApplicationVersionServiceT
 
         // when && then
         assertThatThrownBy(() -> applicationVersionService.getApplicationVersionDetails(DUMMY_VERSION_ID))
-                .isInstanceOf(ResourceNotFoundException.class)
+                .isInstanceOf(RequestValidationException.class)
                 .hasMessage(String.format(exceptionMessageTemplate,
                         CommonApplicationVersionValidator.ENTITY_NAME,
                         CommonApplicationVersionValidator.ID_FIELD_NAME,

@@ -1,6 +1,7 @@
 package com.wj.updatecenter.softwaremanagementservice.domain.applicationversion;
 
-import com.wj.shared.definition.ResourceNotFoundException;
+import com.wj.shared.definition.RequestValidationException;
+import com.wj.updatecenter.softwaremanagementservice.domain.application.helper.CommonApplicationValidator;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.helper.ApplicationVersionValidator;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.helper.CommonApplicationVersionValidator;
 import com.wj.updatecenter.softwaremanagementservice.domain.applicationversion.mapper.ApplicationVersionMapper;
@@ -23,9 +24,11 @@ public class ApplicationVersionService {
     private final ApplicationVersionRepository applicationVersionRepository;
     private final ApplicationVersionMapper applicationVersionMapper;
     private final ApplicationVersionValidator applicationVersionValidator;
+    private final CommonApplicationValidator commonApplicationValidator;
 
     public Page<GetSimplifiedApplicationVersionResponseDto> getApplicationVersions(
             Pageable pageable, long applicationId) {
+        commonApplicationValidator.validateIfExistsById(applicationId);
         Page<ApplicationVersion> applicationVersionsPage =
                 applicationVersionRepository.findAllByApplicationId(pageable, applicationId);
         return applicationVersionsPage.map(applicationVersionMapper::toGetSimplifiedApplicationVersionResponseDto);
@@ -36,13 +39,7 @@ public class ApplicationVersionService {
             CreateApplicationVersionRequestDto createApplicationVersionRequestDto,
             long applicationId) {
         applicationVersionValidator.validateCreateRequest(createApplicationVersionRequestDto, applicationId);
-        Optional<ApplicationVersion> currentApplicationVersion =
-                applicationVersionRepository.findByApplicationIdAndCurrent(applicationId, true);
-        if (currentApplicationVersion.isPresent()) {
-            ApplicationVersion applicationVersion = currentApplicationVersion.get();
-            applicationVersion.setCurrent(false);
-            applicationVersionRepository.save(applicationVersion);
-        }
+        markAsNotCurrentExistingCurrentVersion(applicationId);
         ApplicationVersion applicationVersion =
                 applicationVersionMapper.toApplicationVersion(createApplicationVersionRequestDto, applicationId);
         applicationVersion = applicationVersionRepository.save(applicationVersion);
@@ -57,7 +54,7 @@ public class ApplicationVersionService {
 
     public GetApplicationVersionDetailsDto getApplicationVersionDetails(long id) {
         ApplicationVersion applicationVersion = applicationVersionRepository.findById(id)
-                .orElseThrow(() -> ResourceNotFoundException.notFound(
+                .orElseThrow(() -> RequestValidationException.notFound(
                         CommonApplicationVersionValidator.ENTITY_NAME,
                         CommonApplicationVersionValidator.ID_FIELD_NAME,
                         id));
@@ -71,5 +68,15 @@ public class ApplicationVersionService {
 
     public void deleteApplicationVersionsByApplicationId(long applicationId) {
         applicationVersionRepository.deleteByApplicationId(applicationId);
+    }
+
+    private void markAsNotCurrentExistingCurrentVersion(long applicationId) {
+        Optional<ApplicationVersion> currentApplicationVersion =
+                applicationVersionRepository.findByApplicationIdAndCurrent(applicationId, true);
+        if (currentApplicationVersion.isPresent()) {
+            ApplicationVersion applicationVersion = currentApplicationVersion.get();
+            applicationVersion.setCurrent(false);
+            applicationVersionRepository.save(applicationVersion);
+        }
     }
 }
